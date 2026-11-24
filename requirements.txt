@@ -1,0 +1,12 @@
+# Training environment for train_lora.py / merge_adapter.py (Linux or Colab with an NVIDIA GPU).
+# generate_dataset.py and validate_dataset.py need NONE of these (standard library only).
+# Lower bounds only; these were not installed or run in the authoring environment. If a newer release changes an API,
+# pin to a known-good set from your Colab image (train_lora.py already tolerates the common transformers/TRL renames).
+torch>=2.3
+transformers>=4.44
+peft>=0.12
+trl>=0.11
+bitsandbytes>=0.43
+accelerate>=0.33
+datasets>=2.20
+sentencepiece>=0.2
