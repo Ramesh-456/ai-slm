@@ -85,3 +85,38 @@ llama.cpp not here
 # 4. Confirm pannu
 %cd ..
 !ls out
+
+
+
+
+
+
+
+
+93%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/parser.cpp.o
+[ 93%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/runtime.cpp.o
+[ 93%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/value.cpp.o
+[ 93%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/string.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/caps.cpp.o
+[ 96%] Linking CXX shared library ../bin/libllama-common.so
+[ 96%] Built target llama-common
+[ 96%] Building CXX object tools/quantize/CMakeFiles/llama-quantize-impl.dir/quantize.cpp.o
+[ 96%] Linking CXX shared library ../../bin/libllama-quantize-impl.so
+[ 96%] Built target llama-quantize-impl
+[ 96%] Building CXX object tools/quantize/CMakeFiles/llama-quantize.dir/main.cpp.o
+[100%] Linking CXX executable ../../bin/llama-quantize
+[100%] Built target llama-quantize
+version: 1.0.0-dev (build 12741, commit ab16df399)
+built with GNU 13.3.0 for Linux x86_64
+llama_quantize: quantizing '../out/loomnest-shop-slm.f16.gguf' to '../out/loomnest-shop-slm.Q4_K_M.gguf' as Q4_K_M
+gguf_init_from_file: failed to open GGUF file '../out/loomnest-shop-slm.f16.gguf' (No such file or directory)
+llama_model_quantize: failed to quantize: llama_model_loader: failed to load model from ../out/loomnest-shop-slm.f16.gguf
+llama_quantize: failed to quantize model from '../out/loomnest-shop-slm.f16.gguf'
+/content/ai-slm/ai-slm
+loomnest-shop-lora  merged
+
+
+
+
+
+
