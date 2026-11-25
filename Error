@@ -40,3 +40,9 @@ Traceback (most recent call last):
     ...<2 lines>...
     )
 ImportError: Found an incompatible version of torchao. Found version 0.10.0, but only versions above 0.16.0 are supported
+
+
+
+
+
+!python <llama.cpp>/convert_hf_to_gguf.py out/merged --outfile out/loomnest-shop-slm.f16.gguf --outtype f16
