@@ -120,3 +120,5 @@ loomnest-shop-lora  merged
 
 
 
+%cd llama.cpp
+!python convert_hf_to_gguf.py ../out/merged --outfile ../out/loomnest-shop-slm.f16.gguf --outtype f16
