@@ -1,193 +1,45 @@
-Cloning into 'ai-slm'...
-remote: Enumerating objects: 21, done.
-remote: Counting objects: 100% (21/21), done.
-remote: Compressing objects: 100% (21/21), done.
-remote: Total 21 (delta 3), reused 0 (delta 0), pack-reused 0 (from 0)
-Receiving objects: 100% (21/21), 65.39 KiB | 558.00 KiB/s, done.
-Resolving deltas: 100% (3/3), done.
-/content/ai-slm
-Requirement already satisfied: torch>=2.3 in /usr/local/lib/python3.13/dist-packages (from -r requirements.txt (line 5)) (2.14.1+cu130)
-Requirement already satisfied: transformers>=4.44 in /usr/local/lib/python3.13/dist-packages (from -r requirements.txt (line 6)) (5.22.1)
-Requirement already satisfied: peft>=0.12 in /usr/local/lib/python3.13/dist-packages (from -r requirements.txt (line 7)) (0.21.2)
-Collecting trl>=0.11 (from -r requirements.txt (line 8))
-  Downloading trl-1.18.2-py3-none-any.whl.metadata (13 kB)
-Collecting bitsandbytes>=0.43 (from -r requirements.txt (line 9))
-  Downloading bitsandbytes-0.50.2-py3-none-manylinux_2_24_x86_64.whl.metadata (10 kB)
-Requirement already satisfied: accelerate>=0.33 in /usr/local/lib/python3.13/dist-packages (from -r requirements.txt (line 10)) (1.15.0)
-Requirement already satisfied: datasets>=2.20 in /usr/local/lib/python3.13/dist-packages (from -r requirements.txt (line 11)) (4.8.5)
-Requirement already satisfied: sentencepiece>=0.2 in /usr/local/lib/python3.13/dist-packages (from -r requirements.txt (line 12)) (0.2.2)
-Requirement already satisfied: filelock in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (4.2.7)
-Requirement already satisfied: typing-extensions>=4.10.0 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (4.16.0)
-Requirement already satisfied: setuptools>=77.0.3 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (80.10.2)
-Requirement already satisfied: sympy>=1.13.3 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (1.14.0)
-Requirement already satisfied: networkx>=2.5.1 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (3.7)
-Requirement already satisfied: jinja2 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (3.1.6)
-Requirement already satisfied: fsspec>=0.8.5 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (2025.12.0)
-Requirement already satisfied: cuda-toolkit==13.0.3 in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.0.3.0)
-Requirement already satisfied: cuda-bindings<14,>=13.0.3 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (13.0.3)
-Requirement already satisfied: nvidia-cudnn-cu13==9.24.0.43 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (9.24.0.43)
-Requirement already satisfied: nvidia-cusparselt-cu13==0.8.1 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (0.8.1)
-Requirement already satisfied: nvidia-nccl-cu13==2.30.7 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (2.30.7)
-Requirement already satisfied: nvidia-nvshmem-cu13==3.4.5 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (3.4.5)
-Requirement already satisfied: triton~=3.8.0 in /usr/local/lib/python3.13/dist-packages (from torch>=2.3->-r requirements.txt (line 5)) (3.8.0)
-Requirement already satisfied: nvidia-cublas==13.1.1.3.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.1.1.3)
-Requirement already satisfied: nvidia-cuda-nvrtc==13.0.88.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.0.88)
-Requirement already satisfied: nvidia-cuda-runtime==13.0.96.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.0.96)
-Requirement already satisfied: nvidia-cufft==12.0.0.61.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (12.0.0.61)
-Requirement already satisfied: nvidia-nvjitlink<14,>=13.0.88 in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.4.92)
-Requirement already satisfied: nvidia-cufile==1.15.1.6.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (1.15.1.6)
-Requirement already satisfied: nvidia-cuda-cupti==13.0.85.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.0.85)
-Requirement already satisfied: nvidia-curand==10.4.0.35.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (10.4.0.35)
-Requirement already satisfied: nvidia-cusolver==12.0.4.66.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (12.0.4.66)
-Requirement already satisfied: nvidia-cusparse==12.6.3.3.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (12.6.3.3)
-Requirement already satisfied: nvidia-nvtx==13.0.85.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=2.3->-r requirements.txt (line 5)) (13.0.85)
-Requirement already satisfied: cuda-pathfinder~=1.1 in /usr/local/lib/python3.13/dist-packages (from cuda-bindings<14,>=13.0.3->torch>=2.3->-r requirements.txt (line 5)) (1.8.5)
-Requirement already satisfied: huggingface-hub<3.0,>=1.31.0 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (1.33.0)
-Requirement already satisfied: numpy>=1.17 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (2.4.6)
-Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (26.3)
-Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (6.0.3)
-Requirement already satisfied: regex>=2025.10.22 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (2025.11.3)
-Requirement already satisfied: tokenizers<0.24.0,>=0.23.1 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (0.23.3)
-Requirement already satisfied: typer in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (0.27.3)
-Requirement already satisfied: safetensors>=0.8.0 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (0.8.0)
-Requirement already satisfied: tqdm>=4.60 in /usr/local/lib/python3.13/dist-packages (from transformers>=4.44->-r requirements.txt (line 6)) (4.67.3)
-Requirement already satisfied: click<9.0.0,>=8.4.2 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (8.5.0)
-Requirement already satisfied: hf-xet<2.0.0,>=1.6.0 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (1.8.0)
-Requirement already satisfied: httpx<1,>=0.23.0 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (0.28.1)
-Requirement already satisfied: anyio in /usr/local/lib/python3.13/dist-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (4.16.0)
-Requirement already satisfied: certifi in /usr/local/lib/python3.13/dist-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (2026.10.23)
-Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.13/dist-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (1.0.9)
-Requirement already satisfied: idna in /usr/local/lib/python3.13/dist-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (3.20)
-Requirement already satisfied: h11>=0.16 in /usr/local/lib/python3.13/dist-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers>=4.44->-r requirements.txt (line 6)) (0.16.0)
-Requirement already satisfied: psutil in /usr/local/lib/python3.13/dist-packages (from peft>=0.12->-r requirements.txt (line 7)) (5.9.5)
-Requirement already satisfied: pandas>=2.1.1 in /usr/local/lib/python3.13/dist-packages (from trl>=0.11->-r requirements.txt (line 8)) (2.2.3)
-Requirement already satisfied: pyarrow>=21.0.0 in /usr/local/lib/python3.13/dist-packages (from trl>=0.11->-r requirements.txt (line 8)) (23.0.1)
-Requirement already satisfied: dill<0.4.2,>=0.3.0 in /usr/local/lib/python3.13/dist-packages (from datasets>=2.20->-r requirements.txt (line 11)) (0.4.1)
-Requirement already satisfied: requests>=2.32.2 in /usr/local/lib/python3.13/dist-packages (from datasets>=2.20->-r requirements.txt (line 11)) (2.32.4)
-Requirement already satisfied: xxhash in /usr/local/lib/python3.13/dist-packages (from datasets>=2.20->-r requirements.txt (line 11)) (4.0.2)
-Requirement already satisfied: multiprocess<0.70.20 in /usr/local/lib/python3.13/dist-packages (from datasets>=2.20->-r requirements.txt (line 11)) (0.70.19)
-Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /usr/local/lib/python3.13/dist-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (3.14.5)
-Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (2.7.1)
-Requirement already satisfied: aiosignal>=1.4.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (1.4.0)
-Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (26.1.0)
-Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (1.8.0)
-Requirement already satisfied: multidict<8.0,>=4.5 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (7.2.1)
-Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (0.5.4)
-Requirement already satisfied: yarl<2.0,>=1.25.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=2.20->-r requirements.txt (line 11)) (1.25.1)
-Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.13/dist-packages (from pandas>=2.1.1->trl>=0.11->-r requirements.txt (line 8)) (2.9.0.post0)
-Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.13/dist-packages (from pandas>=2.1.1->trl>=0.11->-r requirements.txt (line 8)) (2025.2)
-Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.13/dist-packages (from pandas>=2.1.1->trl>=0.11->-r requirements.txt (line 8)) (2026.6)
-Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.13/dist-packages (from python-dateutil>=2.8.2->pandas>=2.1.1->trl>=0.11->-r requirements.txt (line 8)) (1.17.0)
-Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.2->datasets>=2.20->-r requirements.txt (line 11)) (3.4.9)
-Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.2->datasets>=2.20->-r requirements.txt (line 11)) (2.5.0)
-Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.13/dist-packages (from sympy>=1.13.3->torch>=2.3->-r requirements.txt (line 5)) (1.3.0)
-Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.13/dist-packages (from jinja2->torch>=2.3->-r requirements.txt (line 5)) (3.0.4)
-Requirement already satisfied: shellingham>=1.3.0 in /usr/local/lib/python3.13/dist-packages (from typer->transformers>=4.44->-r requirements.txt (line 6)) (1.5.4)
-Requirement already satisfied: rich>=13.8.0 in /usr/local/lib/python3.13/dist-packages (from typer->transformers>=4.44->-r requirements.txt (line 6)) (13.9.4)
-Requirement already satisfied: annotated-doc>=0.0.2 in /usr/local/lib/python3.13/dist-packages (from typer->transformers>=4.44->-r requirements.txt (line 6)) (0.0.5)
-Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.13/dist-packages (from rich>=13.8.0->typer->transformers>=4.44->-r requirements.txt (line 6)) (4.2.0)
-Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.13/dist-packages (from rich>=13.8.0->typer->transformers>=4.44->-r requirements.txt (line 6)) (2.21.0)
-Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.13/dist-packages (from markdown-it-py>=2.2.0->rich>=13.8.0->typer->transformers>=4.44->-r requirements.txt (line 6)) (0.1.2)
-Downloading trl-1.18.2-py3-none-any.whl (1.1 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 35.1 MB/s  0:00:00
-Downloading bitsandbytes-0.50.2-py3-none-manylinux_2_24_x86_64.whl (43.1 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 43.1/43.1 MB 73.7 MB/s  0:00:00
-Installing collected packages: bitsandbytes, trl
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2/2 [trl]
-Successfully installed bitsandbytes-0.50.2 trl-1.18.2
-extracted 24 tools from ShoppingAssistantTools.java
-
-examples: 3000 (train 2700 / val 300)
-
-tool calls per tool:
-  searchProducts                   534
-  getStorePolicyInfo               221
-  draftReturnRequest               171
-  getTrendingProducts              145
-  requestOrderReturn               133
-  trackOrder                       120
-  getMyOrders                      116
-  escalateToHumanSupport           108
-  askProductQuestion               105
-  getMyNotifications               103
-  getMyCart                        102
-  cancelOrder                       99
-  getPersonalizedRecommendations    95
-  getProductSentiment               91
-  getSimilarProducts                85
-  addToWishlist                     83
-  getProductReviews                 82
-  getProductReviewSummary           80
-  addToCart                         78
-  getFrequentlyBoughtTogether       77
-  getRefundStatus                   71
-  getUnreadNotificationCount        68
-  getMyWishlist                     56
-  getMyProfile                      52
-
-examples per language: {'en': 1198, 'hi': 592, 'ta': 592, 'tanglish': 618}
-no-tool examples (small talk / refusals / clarifications): 419
-multi-turn examples: 304 | multi-tool-call examples: 294
-
-examples per scenario kind:
-  search               385
-  policy               221
-  return_flow          171
-  trending             145
-  search_followup      133
-  refuse_other         124
-  track                120
-  orders               116
-  notifications        103
-  cart_view            102
-  cancel                99
-  direct_question       97
-  personalized          95
-  direct_wl_add         75
-  direct_similar        73
-  direct_reviews        72
-  refund                71
-  capability_limit      70
-  human                 70
-  direct_revsum         69
-  direct_sentiment      68
-  injection             68
-  unread                68
-  direct_fbt            62
-  direct_cart_add       58
-  wishlist_view         56
-  greet                 52
-  profile               52
-  thanks                40
-  track_noid            36
-  ask_tools             29
-
-wrote /content/ai-slm/data (train.jsonl, val.jsonl, tools_schema.json, system_prompt.txt, dataset_stats.json)
-validated 3000 examples in 2 file(s): 3000 valid, 0 invalid
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-config.json: 100% 660/660 [00:00<00:00, 3.57MB/s]
-tokenizer_config.json: 100% 7.30k/7.30k [00:00<00:00, 28.5MB/s]
-vocab.json: 100% 2.78M/2.78M [00:00<00:00, 73.4MB/s]
-merges.txt: 100% 1.67M/1.67M [00:00<00:00, 121MB/s]
-tokenizer.json: 100% 7.03M/7.03M [00:00<00:00, 151MB/s]
-train: 2700 examples tokenized, 0 dropped (too long / no assistant tokens)
-val: 300 examples tokenized, 0 dropped (too long / no assistant tokens)
-
-model.safetensors: downloading bytes:   0% 0.00/3.09G [00:00<?, ?B/s]
-model.safetensors: downloading bytes:   4% 126M/3.09G [00:01<00:15, 192MB/s, 8.78MB/s  ] 
-model.safetensors: downloading bytes:   7% 216M/3.09G [00:01<00:13, 219MB/s, 16.9MB/s  ]
-model.safetensors: reconstructing file:   3% 80.5M/3.09G [00:01<00:43, 68.7MB/s, 1.29MB/s  ]
-model.safetensors: downloading bytes:   8% 245M/3.09G [00:01<00:14, 192MB/s, 21.6MB/s  ]
-model.safetensors: reconstructing file:   6% 176M/3.09G [00:01<00:18, 160MB/s, 13.5MB/s  ]
-model.safetensors: downloading bytes:   9% 273M/3.09G [00:01<00:16, 173MB/s, 23.5MB/s  ]
-model.safetensors: downloading bytes:  10% 315M/3.09G [00:02<00:15, 183MB/s, 26.3MB/s  ]
-model.safetensors: downloading bytes:  11% 339M/3.09G [00:02<00:14, 193MB/s, 28.3MB/s  ]
-model.safetensors: downloading bytes:  17% 520M/3.09G [00:02<00:08, 292MB/s, 42.1MB/s  ]
-model.safetensors: downloading bytes:  30% 912M/3.09G [00:04<00:12, 172MB/s, 70.2MB/s  ]
-model.safetensors: downloading bytes:  33% 1.01G/3.09G [00:05<00:15, 133MB/s, 73.4MB/s  ]
-model.safetensors: downloading bytes:  45% 1.40G/3.09G [00:07<00:08, 194MB/s, 93.8MB/s  ]
-model.safetensors: downloading bytes:  52% 1.60G/3.09G [00:08<00:05, 254MB/s,  101MB/s  ]
-model.safetensors: downloading bytes:  63% 1.95G/3.09G [00:09<00:03, 348MB/s,  120MB/s  ]
-model.safetensors: downloading bytes:  68% 2.11G/3.09G [00:10<00:03, 251MB/s,  125MB/s  ]
-model.safetensors: downloading bytes:  77% 2.36G/3.09G [00:13<00:03, 193MB/s,  119MB/s  ]
-model.safetensors: downloading bytes:  82% 2.54G/3.09G [00:17<00:05, 96.0MB/s,  101MB/s
+transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'pad_token_id': 151643}.
+  0% 0/20 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/content/ai-slm/train_lora.py", line 325, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/content/ai-slm/train_lora.py", line 321, in main
+    return dry_run(args) if args.dry_run else train(args)
+                                              ~~~~~^^^^^^
+  File "/content/ai-slm/train_lora.py", line 303, in train
+    trainer.train()
+    ~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 1559, in train
+    return inner_training_loop(
+        args=args,
+    ...<2 lines>...
+        ignore_keys_for_eval=ignore_keys_for_eval,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 1643, in _inner_training_loop
+    self._run_epoch(
+    ~~~~~~~~~~~~~~~^
+        model=model,
+        ^^^^^^^^^^^^
+    ...<9 lines>...
+        steps_trained_in_current_epoch=steps_trained_in_current_epoch,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 1889, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/usr/local/lib/python3.13/dist-packages/trl/trainer/sft_trainer.py", line 1739, in training_step
+    return super().training_step(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 2098, in training_step
+    self.accelerator.backward(loss, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/accelerate/accelerator.py", line 2861, in backward
+    loss.backward(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/_tensor.py", line 623, in backward
+    torch.autograd.backward(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, gradient, retain_graph, create_graph, inputs=inputs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
