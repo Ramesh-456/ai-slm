@@ -150,3 +150,15 @@ If the tuned model fails (1)-(3), look at `report.json` failure reasons, extend 
 ## Generated files
 
 `data/train.jsonl` and `data/val.jsonl` are reproducible with the seed and are not meant to be committed; `out/` (adapters, merged weights, GGUF) is multi-GB - keep it out of git.
+
+
+
+!git clone https://github.com/Ramesh-456/ai-slm.git
+%cd ai-slm
+!pip install -r requirements.txt
+!python generate_dataset.py --n 3000 --seed 42 \
+  --tools-java ShoppingAssistantTools.java \
+  --chatbot-java ChatbotServiceImpl.java \
+  --language-java LanguageSupport.java
+!python validate_dataset.py
+!python train_lora.py --max-steps 20
