@@ -162,3 +162,15 @@ If the tuned model fails (1)-(3), look at `report.json` failure reasons, extend 
   --language-java LanguageSupport.java
 !python validate_dataset.py
 !python train_lora.py --max-steps 20
+
+
+
+
+
+!pip install -r requirements.txt 
+!python generate_dataset.py --n 3000 --seed 42 \
+--tools-java ShoppingAssistantTools.java \
+--chatbot-java ChatbotServiceImpl.java \
+--language-java LanguageSupport.java 
+!PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python validate_dataset.py 
+!python train_lora.py --epochs 2 --trainer hf
