@@ -1,80 +1,42 @@
-transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'pad_token_id': 151643}.
-  0% 0/20 [00:00<?, ?it/s]Traceback (most recent call last):
-  File "/content/ai-slm/train_lora.py", line 325, in <module>
+Loading weights: 100% 338/338 [00:00<00:00, 18943.25it/s]
+Traceback (most recent call last):
+  File "/content/ai-slm/ai-slm/merge_adapter.py", line 47, in <module>
     sys.exit(main())
              ~~~~^^
-  File "/content/ai-slm/train_lora.py", line 321, in main
-    return dry_run(args) if args.dry_run else train(args)
-                                              ~~~~~^^^^^^
-  File "/content/ai-slm/train_lora.py", line 303, in train
-    trainer.train()
-    ~~~~~~~~~~~~~^^
-  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 1559, in train
-    return inner_training_loop(
-        args=args,
+  File "/content/ai-slm/ai-slm/merge_adapter.py", line 37, in main
+    model = PeftModel.from_pretrained(model, args.adapter).merge_and_unload()
+            ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/peft/peft_model.py", line 593, in from_pretrained
+    model = MODEL_TYPE_TO_PEFT_MODEL_MAPPING[config.task_type](
+        model,
+    ...<3 lines>...
+        low_cpu_mem_usage=low_cpu_mem_usage,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/peft/peft_model.py", line 2082, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/peft/peft_model.py", line 177, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/peft/tuners/tuners_utils.py", line 344, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage, state_dict=state_dict)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/peft/tuners/tuners_utils.py", line 978, in inject_adapter
+    self._create_and_replace(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        peft_config, adapter_name, target, target_name, parent, current_key=key
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/peft/tuners/lora/model.py", line 389, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, device_map=device_map, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/peft/tuners/lora/model.py", line 552, in _create_new_module
+    new_module = dispatcher(target, adapter_name, config=lora_config, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/peft/tuners/lora/torchao.py", line 160, in dispatch_torchao
+    if not is_torchao_available():
+           ~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/dist-packages/peft/import_utils.py", line 162, in is_torchao_available
+    raise ImportError(
     ...<2 lines>...
-        ignore_keys_for_eval=ignore_keys_for_eval,
     )
-  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 1643, in _inner_training_loop
-    self._run_epoch(
-    ~~~~~~~~~~~~~~~^
-        model=model,
-        ^^^^^^^^^^^^
-    ...<9 lines>...
-        steps_trained_in_current_epoch=steps_trained_in_current_epoch,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 1889, in _run_epoch
-    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
-  File "/usr/local/lib/python3.13/dist-packages/trl/trainer/sft_trainer.py", line 1739, in training_step
-    return super().training_step(*args, **kwargs)
-           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/transformers/trainer.py", line 2098, in training_step
-    self.accelerator.backward(loss, **kwargs)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/accelerate/accelerator.py", line 2861, in backward
-    loss.backward(**kwargs)
-    ~~~~~~~~~~~~~^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/torch/_tensor.py", line 623, in backward
-    torch.autograd.backward(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        self, gradient, retain_graph, create_graph, inputs=inputs
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-File "/usr/local/lib/python3.13/dist-packages/torch/autograd/__init__.py", line 395, in backward
-    _engine_run_backward(
-    ~~~~~~~~~~~~~~~~~~~~^
-        tensors,
-        ^^^^^^^^
-    ...<5 lines>...
-        accumulate_grad=True,
-        ^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/usr/local/lib/python3.13/dist-packages/torch/autograd/graph.py", line 1072, in _engine_run_backward
-    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        t_outputs, *args, **kwargs
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )  # Calls into the C++ engine to run the backward pass
-    ^
-  File "/usr/local/lib/python3.13/dist-packages/torch/autograd/function.py", line 366, in apply
-    return user_fn(self, *args)
-  File "/usr/local/lib/python3.13/dist-packages/trl/kernels/chunked_logprob.py", line 734, in backward
-    _addmm_fp32(grad_hidden[token_start:token_end], tile, w_chunk)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/trl/kernels/chunked_logprob.py", line 62, in _addmm_fp32
-    torch.addmm(acc, a, b, out_dtype=torch.float32, out=acc)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-RuntimeError: gemm input 
-
-
-
-
-
-using transformers.Trainer
-  0% 0/20 [00:00<?, ?it/s][W1125 09:40:18.701526298 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2111832064 bytes (free: 480051200, total: 15637086208).
-[W1125 09:42:22.695372372 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2397044736 bytes (free: 1102905344, total: 15637086208).
- 25% 5/20 [24:33<1:13:43, 294.91s/it]
+ImportError: Found an incompatible version of torchao. Found version 0.10.0, but only versions above 0.16.0 are supported
