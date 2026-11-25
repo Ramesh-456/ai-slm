@@ -69,3 +69,12 @@ File "/usr/local/lib/python3.13/dist-packages/torch/autograd/__init__.py", line 
     torch.addmm(acc, a, b, out_dtype=torch.float32, out=acc)
     ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 RuntimeError: gemm input 
+
+
+
+
+
+using transformers.Trainer
+  0% 0/20 [00:00<?, ?it/s][W1125 09:40:18.701526298 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2111832064 bytes (free: 480051200, total: 15637086208).
+[W1125 09:42:22.695372372 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2397044736 bytes (free: 1102905344, total: 15637086208).
+ 25% 5/20 [24:33<1:13:43, 294.91s/it]
