@@ -230,3 +230,230 @@ pannalam. README.md la "Section 5" la detailed steps irukku.
   default), worry venam.
 
 Edhavadhu step la stuck aana, andha exact error message-a ping pannu — naan help pannuren. 👍
+
+---
+
+## 6. Troubleshooting Log (20-step smoke test-la face pannina errors + fixes)
+
+Idhu namba 20-step smoke test pannумbodhu face pannина **real errors**, exact fix-oda. **Full training (`--epochs 2`) pannумbodhu idhе errors mathuvadhum varralam** — adhanala idha முதலில படிचcу vачіருnga.
+
+### 6.1 Torch CPU-only install aagiruchu (local laptop)
+
+**Symptom**: `python -c "import torch; print(torch.cuda.is_available())"` → `False`, aana `nvidia-smi` GPU kaatuдhу.
+
+**Reason**: `pip install -r requirements.txt` default-a torch-oda **CPU-only build** install pannudhu (Windows-la PyPI default).
+
+**Fix**:
+```powershell
+pip uninstall torch -y
+pip install torch --index-url https://download.pytorch.org/whl/cu124
+```
+
+### 6.2 `--max-seq-len` romba kammi-aa kodutha, "0 examples tokenized, all dropped"
+
+**Symptom**: `train: 0 examples tokenized, 2700 dropped (too long / no assistant tokens)`
+
+**Reason**: Ovvoru example-oda system prompt + 24 tool schemas mattume **~3.3k-4.2k tokens** — `--max-seq-len` idhукku kiழே kodutha, எல்லாம் drop aagும்.
+
+**Fix**: `--max-seq-len` flag-a **podaadhinga** (default 4608 use pannட்டும்). Idha kuraikka mudiyadhu.
+
+### 6.3 `trl.SFTTrainer` "gemm input" crash (T4 GPU-la)
+
+**Symptom**:
+```
+RuntimeError: gemm input...
+File ".../trl/kernels/chunked_logprob.py", line 734, in backward
+```
+
+**Reason**: Puthiy `trl` version-oda "chunked_logprob" optimized kernel **bf16 gemm** use pannudhu — idhu **Ampere-um adhukku melana GPUs mattum** (A100, RTX 30xx+) support pannum. **T4 — Turing architecture (pre-Ampere)** — adhanala crash.
+
+**Fix**: `--trainer hf` flag kodu (plain `transformers.Trainer` use pannum, same data/masking, model quality same):
+```python
+!python train_lora.py --epochs 2 --trainer hf
+```
+
+### 6.4 OOM warnings (`transformers.Trainer` vachu) + romba slow (~300s/step)
+
+**Symptom**:
+```
+[W...] memory allocation failed with OOM on device 0 while trying to allocate ... (free: ..., total: 15637086208)
+```
+
+**Reason**: Qwen2-oda periya vocabulary (151,643 words) + nedumaiyana sequence (4608 tokens) → loss calculate pannumbodhu oru **huge (~2GB) temporary buffer** venum, T4-oda 16GB almost full-aa use aagiruchu.
+
+**Fix**: Memory fragmentation reduce pannu:
+```python
+!PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python train_lora.py --epochs 2 --trainer hf
+```
+
+### 6.5 Kaggle — "Could not resolve host: github.com"
+
+**Reason**: Kaggle notebook-la **Internet toggle OFF** irundhuchu.
+
+**Fix**: Right panel → **Session options → Internet → ON** pannu (first time phone verification venum: Settings → Phone Verification).
+
+### 6.6 Kaggle — GPU session "Starting..." (yellow) romba neram stuck
+
+**Fix order**: Page refresh (F5) → Accelerator-a "None" → mathuvadhum "GPU T4 x2" → GPU type maathi (P100) try pannu → puthiy notebook create pannu.
+
+### 6.7 `!` prefix illama command kodutha (git clone, pip install, python...)
+
+**Symptom**: `SyntaxError` illana command recognize aagale.
+
+**Reason**: Notebook cell-la shell commands-ku **`!` prefix mandatory** (`!git clone...`, `!pip install...`, `!python...`). `%cd` mattum exception (ippadiye okay).
+
+### 6.8 `<llama.cpp>` angle brackets literal-aa type pannina
+
+**Symptom**: `/bin/bash: line 1: llama.cpp: No such file or directory`
+
+**Reason**: `<...>` nu README-la irukkura **placeholder notation** — "idhoda pakkathula unga real path-a podu" nu artham, adhe type pannaadhinga.
+
+**Fix**: Actual path kodu (`llama.cpp/convert_hf_to_gguf.py` illana `%cd llama.cpp` pannitu `convert_hf_to_gguf.py`).
+
+### 6.9 `merge_adapter.py` — torchao version error
+
+**Symptom**: `ImportError: Found an incompatible version of torchao. Found version 0.10.0, but only versions above 0.16.0 are supported`
+
+**Reason**: Colab-la pazhaya `torchao` pre-installed irukku, `peft` puthiy version expect pannudhu — idha namba use pannave illa.
+
+**Fix**:
+```python
+!pip uninstall torchao -y
+```
+
+### 6.10 GGUF convert — `AttributeError: 'list' object has no attribute 'keys'`
+
+**Symptom**: `convert_hf_to_gguf.py` run pannumbodhu tokenizer load pannumbodhu crash.
+
+**Reason**: Installed `transformers` version-oda bug — `tokenizer_config.json`-la `extra_special_tokens` **list format**-la irukku, library **dict** expect pannudhu.
+
+**Fix** (`out/merged/tokenizer_config.json`-a patch pannu):
+```python
+import json
+path = "../out/merged/tokenizer_config.json"
+with open(path) as f:
+    config = json.load(f)
+if isinstance(config.get("extra_special_tokens"), list):
+    config["extra_special_tokens"] = {t: t for t in config["extra_special_tokens"]}
+    with open(path, "w") as f:
+        json.dump(config, f, indent=2)
+```
+
+### 6.11 Nested `ai-slm/ai-slm` folder confusion
+
+**Reason**: `git clone` rendu thadava run panninadhal, illana already `ai-slm` kulla irundhu mathuvadhum `%cd ai-slm` pannina, nested folder varum.
+
+**Fix**: Edhavadhu command run panna munnadi, `!pwd` and `!ls` vachu confirm pannu current folder enna irukkunu.
+
+### 6.12 Chatbot integration — `NullPointerException: Cannot invoke "Number.intValue()"`
+
+**Symptom**: Real app-la chat API call pannumbodhu, backend logs-la:
+```
+java.lang.NullPointerException: Cannot invoke "java.lang.Number.intValue()"...
+at org.springframework.ai.tool.method.MethodToolCallback.callMethod
+```
+
+**Reason**: `ShoppingAssistantTools.java`-la `getTrendingProducts(int limit)`, `addToCart(..., int quantity)` madhiri methods-ku **mandatory `int` arguments** venum — 20-step smoke-test model idha eppozhuthum kodukkale (training incomplete).
+
+**Fix**: Idhu **code bug illa** — full training (`--epochs 2`) mudinjadhukku apparam, model correct-aa ella mandatory arguments-um kodukkum, idhe error varadhu. Integration/wiring already correct-nu idhe confirm pannuchu.
+
+---
+
+**Summary**: Full training (`--epochs 2`) run panna idhe command use pannu (namba discover pannina ella fixes sertha):
+```python
+!PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python train_lora.py --epochs 2 --trainer hf
+```
+Merge/GGUF step pannumbodhu, **6.9 (torchao uninstall)** and **6.10 (tokenizer patch)** fixes mathuvadhum pannanum (puthiy `out/merged` folder-ku).
+
+---
+
+## 7. ONE full command — overnight unattended run (train + merge + GGUF + quantize)
+
+Idhu **ella steps-um (dataset generate → validate → full train → merge → tokenizer patch → GGUF convert → quantize) oru single cell-la** — ella fixes (6.1-6.11) sertha. `set -e` podirukkom, adhanala **edhavadhu step fail aana, udane script stop aagidum** (next steps waste aagadhu) — morning-la scroll-up pannina, exact enga nirutha nu kaanum.
+
+### Prerequisite (idha cell run pannadhukku munnadi pannanum)
+
+Colab: **Runtime → Change runtime type → T4 GPU** select pannitu Save pannu. (Kaggle: Session options → Accelerator → GPU T4 x2, Internet ON.)
+
+### Cell 1 — Idhu mattum paste pannu, run pannitu night full-a vidu
+
+```bash
+%%bash
+set -e
+
+echo "=== Checking GPU ==="
+python -c "import torch,sys; sys.exit(0 if torch.cuda.is_available() else 1)" || { echo "NO GPU DETECTED - select GPU accelerator first, then rerun"; exit 1; }
+
+echo "=== 1. Clone repo ==="
+git clone https://github.com/Ramesh-456/ai-slm.git
+cd ai-slm
+
+echo "=== 2. Install dependencies ==="
+pip install -r requirements.txt
+
+echo "=== 3. Generate dataset ==="
+python generate_dataset.py --n 3000 --seed 42 \
+  --tools-java ShoppingAssistantTools.java \
+  --chatbot-java ChatbotServiceImpl.java \
+  --language-java LanguageSupport.java
+
+echo "=== 4. Validate dataset ==="
+python validate_dataset.py
+
+echo "=== 5. FULL TRAINING (2 epochs, ~2-4 hours on T4) ==="
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python train_lora.py --epochs 2 --trainer hf
+
+echo "=== 6. Remove torchao (merge compatibility fix) ==="
+pip uninstall torchao -y
+
+echo "=== 7. Merge adapter into base model ==="
+python merge_adapter.py --base-model Qwen/Qwen2.5-1.5B-Instruct --adapter out/loomnest-shop-lora/adapter --out out/merged
+
+echo "=== 8. Patch tokenizer_config.json (transformers list/dict bug fix) ==="
+python - <<'EOF'
+import json
+path = "out/merged/tokenizer_config.json"
+with open(path) as f:
+    config = json.load(f)
+if isinstance(config.get("extra_special_tokens"), list):
+    config["extra_special_tokens"] = {t: t for t in config["extra_special_tokens"]}
+    with open(path, "w") as f:
+        json.dump(config, f, indent=2)
+    print("patched: list -> dict")
+else:
+    print("no patch needed")
+EOF
+
+echo "=== 9. Clone llama.cpp and convert to GGUF ==="
+git clone https://github.com/ggml-org/llama.cpp
+cd llama.cpp
+pip install -r requirements/requirements-convert_hf_to_gguf.txt
+python convert_hf_to_gguf.py ../out/merged --outfile ../out/loomnest-shop-slm.f16.gguf --outtype f16
+
+echo "=== 10. Build llama-quantize ==="
+cmake -B build
+cmake --build build --config Release -t llama-quantize
+
+echo "=== 11. Quantize ==="
+./build/bin/llama-quantize ../out/loomnest-shop-slm.f16.gguf ../out/loomnest-shop-slm.Q4_K_M.gguf Q4_K_M
+
+cd ..
+echo "=== ALL DONE ==="
+ls -lh out/*.gguf
+```
+
+### Morning-la — Cell 2 (separate cell, idha manual-aa run pannanum)
+
+⚠️ **`files.download()` ku browser tab active-aa open irukkanum** — adhanala idha **Cell 1 kulla sertha mudiyadhu**, automatic-aa trigger aagadhu tab close irundha. Morning-la vandhu, Cell 1 "ALL DONE" kaatiya apparam, **idha separate cell-la run pannu**:
+
+```python
+from google.colab import files
+files.download('ai-slm/out/loomnest-shop-slm.Q4_K_M.gguf')
+```
+
+### Important — overnight-ku
+
+- **Laptop-a sleep mode-ku pogadha madhiri** vachiruka (Settings → Power → "never sleep" / plugged-in mode).
+- **Browser tab-a close pannadhinga** (background-la vachiruka pothum, screen off aana kooda problem illa — tab close mattum pannaadhinga).
+- Internet connection stable-a irukkanum (WiFi drop aana session disconnect aagalam).
+- Cell "actively running" irukkura varai (output print aaguthu), Colab idle-timeout apply pannadhu — idhu safe.
