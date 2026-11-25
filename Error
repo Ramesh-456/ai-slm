@@ -1,13 +1,1 @@
-import json
-
-path = "../out/merged/tokenizer_config.json"
-with open(path) as f:
-    config = json.load(f)
-
-if isinstance(config.get("extra_special_tokens"), list):
-    config["extra_special_tokens"] = {t: t for t in config["extra_special_tokens"]}
-    with open(path, "w") as f:
-        json.dump(config, f, indent=2)
-    print("Patched! list -> dict converted")
-else:
-    print("Already fine:", config.get("extra_special_tokens"))
+!python convert_hf_to_gguf.py ../out/merged --outfile ../out/loomnest-shop-slm.f16.gguf --outtype f16
