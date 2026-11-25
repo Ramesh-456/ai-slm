@@ -45,4 +45,19 @@ ImportError: Found an incompatible version of torchao. Found version 0.10.0, but
 
 
 
+
+
+
 !python <llama.cpp>/convert_hf_to_gguf.py out/merged --outfile out/loomnest-shop-slm.f16.gguf --outtype f16
+
+
+ChatbotServiceImpl.java  merge_adapter.py  ShoppingAssistantTools.java
+data			 Modelfile	   slm_lexicon.py
+Error			 out		   test_slm_tools.py
+generate_dataset.py	 __pycache__	   TRAINING_GUIDE.md
+java_tools.py		 README.md	   train_lora.py
+LanguageSupport.java	 requirements.txt  validate_dataset.py
+/bin/bash: line 1: dev/null: No such file or directory
+llama.cpp not here
+/bin/bash: line 1: dev/null: No such file or directory
+/bin/bash: line 1: out folder not here: command not found
